@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <style>
+            * {
+                border: 0;
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box
+            }
+            aside {
+                float: left;
+                width: 20%;
+                height: 100vh;
+                box-shadow: 5px 0px 15px 5px #eee;
+            }
+            section {
+                width: 80%;
+                height: 100vh;
+                float: left;
+                overflow-y: auto
+            }
+            .statu {
+                position: relative;
+                width: 90%;
+                height: 100px;
+                margin: 10px auto;
+                box-shadow: 2px 2px 10px 3px #eee;
+                line-height: 100px;
+                padding: 0 50px
+            }
+            .statu span {
+                float: left;
+                font-size: 20px;
+                color: #222;
+            }
+            .statu i {
+                font-size: 30px;
+                height: 100%;
+                line-height: 100px;
+                margin-right: 10px;
+                float: left
+            }
+        </style>
+    </head>
+    <body>
+        <aside>
+            <div id="demo"></div>
+        </aside>
+        <section>
+        </section>
+        <script>
+            window.onload = () => {
+                var xhttp = new XMLHttpRequest()
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                       var logs = JSON.parse(this.responseText)
+                       for(log of logs){
+                           let Log = log.split(',')
+                           let div = document.createElement('div')
+                           div.classList.add('statu')
+                           let icn = document.createElement('i')
+                           icn.classList.add('fa')
+                           if(Log[0] == 0) {
+                               icn.style.color = '#c92f2a'
+                               icn.classList.add('fa-exclamation-circle')
+                           }
+                           else {
+                               icn.style.color = '#65e6ad'
+                               icn.classList.add('fa-check-circle')
+                           }
+                           div.appendChild(icn)
+                           let text = document.createElement('span')
+                           text.style.width = '80%'
+                           text.innerHTML = `<span>${Log[1]}</span><span style='float:right'>${Log[2]}</span>`
+                           div.appendChild(text)
+                           document.querySelector('section').insertBefore(div, document.querySelector('section').firstChild)
+                          // document.querySelector('section').appendChild(div)
+                       }
+                   }
+               }
+               xhttp.open("GET", "/getLog", true)
+               xhttp.send()
+           }
+           window.onload = () => {setInterval(() => {
+                var xhttp = new XMLHttpRequest()
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                       var logs = JSON.parse(this.responseText)
+                       document.querySelector('section').innerHTML = ""
+                       for(log of logs){
+                           let Log = log.split(',')
+                           let div = document.createElement('div')
+                           div.classList.add('statu')
+                           let icn = document.createElement('i')
+                           icn.classList.add('fa')
+                           if(Log[0] == 0) {
+                               icn.style.color = '#c92f2a'
+                               icn.classList.add('fa-exclamation-circle')
+                           }
+                           else {
+                               icn.style.color = '#65e6ad'
+                               icn.classList.add('fa-check-circle')
+                           }
+                           div.appendChild(icn)
+                           let text = document.createElement('span')
+                           text.style.width = '80%'
+                           text.innerHTML = `<span>${Log[1]}</span><span style='float:right'>${Log[2]}</span>`
+                           div.appendChild(text)
+                           document.querySelector('section').insertBefore(div, document.querySelector('section').firstChild)
+                       }
+                   }
+               }
+               xhttp.open("GET", "/getLog", true)
+               xhttp.send()
+           }, 1000)
+       }
+       </script>
+   </body>
+</html>
